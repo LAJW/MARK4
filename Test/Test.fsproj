@@ -48,7 +48,6 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="TestUtils.fs" />
     <Compile Include="CameraTest.fs" />
-    <Compile Include="CommonTest.fs" />
     <Compile Include="VecTest.fs" />
     <Compile Include="Geometry\SegmentTest.fs" />
     <Compile Include="StateMachine.fs" />

@@ -7,12 +7,12 @@ open System.Runtime.InteropServices
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[<assembly: AssemblyTitle("Mark3")>]
+[<assembly: AssemblyTitle("Mark4")>]
 [<assembly: AssemblyDescription("")>]
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
-[<assembly: AssemblyProduct("Mark3")>]
-[<assembly: AssemblyCopyright("Copyright © 2019")>]
+[<assembly: AssemblyProduct("Mark4")>]
+[<assembly: AssemblyCopyright("Copyright © 2020")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
