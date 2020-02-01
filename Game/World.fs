@@ -6,7 +6,7 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
     let newDude, dudeProjectile = this.Dude |> Dude.update resourceManager controller dt
     { this with
         Dude = newDude
-        Enemies = this.Enemies |> List.map (Sentry.update dt)
+        Enemies = this.Enemies |> List.map (Sentry.update this.Dude.Pos dt)
         Projectiles = 
             let projectiles = this.Projectiles |> List.map (Projectile.update dt)
             projectiles @ ( dudeProjectile |> Option.toList )

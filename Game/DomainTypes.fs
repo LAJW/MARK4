@@ -105,7 +105,7 @@ type Command =
 type Sentry = {
     Pos : Vec<m>
     Texture : Texture2D
-    Ai : StateMachine<unit, (float<s> * Sentry), Command>
+    Ai : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command>
     Command : Command option
 }
 

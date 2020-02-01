@@ -2,8 +2,29 @@
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 open StateMachine
 
+let spotDistance = 200.<m>
+
+let waitUntilAndReturn condition : StateMachine<'u, (float<s> * 'u), 'a>  =
+    sm {
+        let mutable result = Unchecked.defaultof<'u>
+        do! waitUntil (fun state ->
+            do result <- state
+            condition state)
+        return result
+    }
+
+let getState() = waitUntilAndReturn (fun _ -> true)
+
+let rec stalkDude() : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command> = sm {
+    let! sentry, dudePos = getState()
+    if sentry.Pos |> Vec.inProximity dudePos spotDistance then
+        yield MoveTo dudePos
+        return! stalkDude()
+    return! waitOnce()
+}
+
 let create (resourceManager : IResourceManager) =
-    let ai : StateMachine<unit, (float<s> * Sentry), Command> = sm {
+    let ai : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command> = sm {
         let path = [
             vec(500.<m>, 300.<m>)
             vec(200.<m>, 300.<m>)
@@ -14,7 +35,11 @@ let create (resourceManager : IResourceManager) =
             for dest in path do
                 yield MoveTo(dest)
                 do! waitFor(0.5<s>)
-                do! waitUntil(fun sentry -> sentry.Pos |> Vec.inProximity dest 10.<m>)
+                let! sentry, dudePos = waitUntilAndReturn(fun (sentry, dudePos) ->
+                    (sentry.Pos |> Vec.inProximity dudePos spotDistance)
+                    || (sentry.Pos |> Vec.inProximity dest 10.<m>))
+                do! stalkDude()
+                ()
     }
     {
         Pos = Vec.Zero
@@ -25,8 +50,8 @@ let create (resourceManager : IResourceManager) =
 
 let speed = 300.<m/s>
 
-let update (dt : float<s>) (this : Sentry) =
-    let ai, commands = this.Ai |> StateMachine.step (dt, this)
+let update (dudePos : Vec<m>) (dt : float<s>) (this : Sentry) =
+    let ai, commands = this.Ai |> StateMachine.step (dt, (this, dudePos))
     let maybeCommand = commands |> List.tryLast |> Option.orElse this.Command
     match maybeCommand with
     | Some command ->
