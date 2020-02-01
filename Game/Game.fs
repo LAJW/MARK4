@@ -25,7 +25,12 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
 
     let mutable world : World = {
         Dude = Dude.create(resourceManager) |> Some
-        Items = []
+        Items = [
+            {
+                Pos = vec(-400.<m>, -400.<m>)
+                Chem = Stimpack
+            }
+        ]
         Enemies = [
             { Sentry.create (resourceManager) with
                 Pos = vec(500.<m>, -300.<m>)

@@ -18,4 +18,8 @@ let apply (world : World) (effect : Effect) =
             else
                 { world with
                     Dude = world.Dude |> Option.map(fun dude -> { dude with Health = dude.Health - amount }) }
+    | Restore ->
+        world
+        { world with Dude = world.Dude |> Option.map (fun dude -> { dude with Health = 100.<HP> }) }
+
         

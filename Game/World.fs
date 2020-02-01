@@ -16,15 +16,22 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
     let enemies, enemyProjectiles = 
         let results = this.Enemies |> List.map (Sentry.update resourceManager (this.Dude |> Option.map Dude.pos) dt)
         (results |> List.map fst, results |> List.collect snd)
-    let projectiles, effects =
+    let projectiles, projectileEffects =
         let results = this.Projectiles |> List.map (Projectile.update this dt)
         (results |> List.choose fst, results |> List.choose snd)
-    effects
+    let items, itemEffects =
+        match this.Dude with
+        | Some dude ->
+            let results = this.Items |> List.map (Item.update dude)
+            (results |> List.choose fst, results |> List.choose snd)
+        | None -> this.Items, []
+    itemEffects @ projectileEffects
     |> List.fold
         Effect.apply
         { this with
             Dude = newDude
             Enemies = enemies
+            Items = items
             Projectiles = projectiles @ enemyProjectiles @ ( dudeProjectile |> Option.toList )
         }
     |> removeDead

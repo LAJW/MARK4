@@ -97,6 +97,7 @@ type Id = Id of int
 
 type Effect =
 | Damage of Id * float<HP>
+| Restore
 
 type Projectile = {
     Allied : bool

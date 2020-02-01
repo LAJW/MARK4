@@ -28,6 +28,7 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
             Pos = this.Pos + controller.PlayerMoveDirection * speed * dt
             Direction = direction
             WeaponCooldown = cooldown
+            Health = this.Health - 10.<HP/s> * dt
     }
     newThis, projectile
 
