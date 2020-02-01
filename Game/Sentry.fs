@@ -25,27 +25,23 @@ let rec stalkDude() : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command
 
 let create (resourceManager : IResourceManager) =
     let ai : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command> = sm {
-        let path = [
-            vec(500.<m>, 300.<m>)
-            vec(200.<m>, 300.<m>)
-            vec(200.<m>, -300.<m>)
-            vec(500.<m>, -300.<m>)
-        ]
         while true do
-            for dest in path do
+            let! sentry, _ = getState()
+            for dest in sentry.Path do
+                do! waitForOrUntil (1.<s>) (fun (sentry, dudePos) ->
+                    sentry.Pos |> Vec.inProximity dudePos spotDistance)
                 yield MoveTo(dest)
-                do! waitFor(0.5<s>)
                 let! sentry, dudePos = waitUntilAndReturn(fun (sentry, dudePos) ->
                     (sentry.Pos |> Vec.inProximity dudePos spotDistance)
                     || (sentry.Pos |> Vec.inProximity dest 10.<m>))
                 do! stalkDude()
-                ()
     }
     {
         Pos = Vec.Zero
         Texture = resourceManager.Texture("Triangle")
         Ai = ai
         Command = None
+        Path = []
     }
 
 let speed = 300.<m/s>

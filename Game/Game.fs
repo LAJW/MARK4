@@ -26,7 +26,14 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
         Items = []
         Enemies = [
             { Sentry.create (resourceManager) with
-                Pos = vec(500.<m>, -300.<m>) }
+                Pos = vec(500.<m>, -300.<m>)
+                Path = [
+                    vec(500.<m>, 300.<m>)
+                    vec(200.<m>, 300.<m>)
+                    vec(200.<m>, -300.<m>)
+                    vec(500.<m>, -300.<m>)
+                ]
+            }
         ]
         Projectiles = []
     }

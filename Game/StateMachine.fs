@@ -92,6 +92,17 @@ let waitUntil(callback) =
         (fun (_dt, state) -> callback state),
         (fun () -> Detail.result ()), [])
 
+let waitForOrUntil (expected : float<s>) callback =
+    let mutable remaining = expected
+    StateMachine.Checked(
+        (fun (dt : float<s>, state) ->
+            if callback state ||  remaining <= dt then
+                true
+            else
+                do remaining <- remaining - dt
+                false),
+        (fun () -> Detail.result ()), [])
+
 let step = Detail.step
 
 type StateMachineManager<'T, 'U, 'V>(machine : StateMachine<'T, 'U, 'V>) =
