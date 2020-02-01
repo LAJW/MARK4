@@ -43,3 +43,7 @@ let render (this : Dude) : Renderable list =
         Texture = Some (this.Texture)
     }) ]
 
+let isAlive (this : Dude) = 
+    this.Health > 0.<HP>
+
+let pos (this : Dude) = this.Pos

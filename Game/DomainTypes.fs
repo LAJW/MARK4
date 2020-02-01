@@ -115,9 +115,10 @@ type Sentry = {
     Pos : Vec<m>
     Texture : Texture2D
     Path : Vec<m> list
-    Ai : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command>
+    Ai : StateMachine<unit, (float<s> * (Sentry * Vec<m> option)), Command>
     Command : Command option
     Cooldown : Cooldown
+    Health : float<HP>
 }
 
 type Chem =
@@ -132,7 +133,7 @@ type Item = {
 }
 
 type World = {
-    Dude : Dude
+    Dude : Dude option
     Items : Item list
     Enemies : Sentry list
     Projectiles : Projectile list

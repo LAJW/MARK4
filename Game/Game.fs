@@ -22,7 +22,7 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
     }
 
     let mutable world : World = {
-        Dude = Dude.create(resourceManager)
+        Dude = Dude.create(resourceManager) |> Some
         Items = []
         Enemies = [
             { Sentry.create (resourceManager) with

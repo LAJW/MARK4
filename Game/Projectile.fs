@@ -21,7 +21,7 @@ let update (world : World) (dt : float<s>) (this : Projectile) : (Projectile opt
             |> Seq.map (fun enemy -> enemy.Pos)
             |> Seq.enumerate
             |> Seq.map(fun (index, pos) -> Id(index), pos)
-        else List.toSeq[ (Id(-1), world.Dude.Pos) ]
+        else world.Dude |> Option.toList |> Seq.map(fun dude -> Id(-1), dude.Pos)
     let collision =
         targets |> Seq.tryFind(fun (id, targetPos) -> targetPos |> Vec.inProximity this.Pos 55.<m>)
     match collision with

@@ -64,6 +64,7 @@
     <Compile Include="Dude.fs" />
     <Compile Include="Item.fs" />
     <Compile Include="Sentry.fs" />
+    <Compile Include="Effect.fs" />
     <Compile Include="World.fs" />
     <Compile Include="ResourceManager.fs" />
     <Compile Include="Renderer.fs" />

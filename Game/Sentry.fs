@@ -16,25 +16,35 @@ let waitUntilAndReturn condition : StateMachine<'u, (float<s> * 'u), 'a>  =
 
 let getState() = waitUntilAndReturn (fun _ -> true)
 
-let rec stalkDude() : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command> = sm {
-    let! sentry, dudePos = getState()
-    if sentry.Pos |> Vec.inProximity dudePos spotDistance then
-        yield MoveTo dudePos
-        yield Shoot dudePos
-        return! stalkDude()
+let rec stalkDude() : StateMachine<unit, (float<s> * (Sentry * Vec<m> option)), Command> = sm {
+    let! sentry, maybeDudePos = getState()
+    match maybeDudePos with
+    | Some dudePos -> 
+        if sentry.Pos |> Vec.inProximity dudePos spotDistance then
+            yield MoveTo dudePos
+            yield Shoot dudePos
+            return! stalkDude()
+    | None -> ()
 }
 
 let create (resourceManager : IResourceManager) =
-    let ai : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command> = sm {
+    let ai : StateMachine<unit, (float<s> * (Sentry * Vec<m> option)), Command> = sm {
         while true do
             let! sentry, _ = getState()
             for dest in sentry.Path do
                 do! waitForOrUntil (1.<s>) (fun (sentry, dudePos) ->
-                    sentry.Pos |> Vec.inProximity dudePos spotDistance)
+                    match dudePos with
+                    | Some dudePos -> sentry.Pos |> Vec.inProximity dudePos spotDistance
+                    | None -> false)
                 yield MoveTo dest
                 let! sentry, dudePos = waitUntilAndReturn(fun (sentry, dudePos) ->
-                    (sentry.Pos |> Vec.inProximity dudePos spotDistance)
-                    || (sentry.Pos |> Vec.inProximity dest 10.<m>))
+                    if sentry.Pos |> Vec.inProximity dest 10.<m> then
+                        true
+                    else
+                        match dudePos with
+                        | Some dudePos -> (sentry.Pos |> Vec.inProximity dudePos spotDistance)
+                        | None -> false
+                )
                 do! stalkDude()
     }
     {
@@ -43,12 +53,13 @@ let create (resourceManager : IResourceManager) =
         Ai = ai
         Command = None
         Path = []
+        Health = 20.<HP>
         Cooldown = Cooldown.create(1.<s>)
     }
 
 let speed = 300.<m/s>
 
-let update (resourceManager : IResourceManager) (dudePos : Vec<m>) (dt : float<s>) (this : Sentry) : Sentry * (Projectile list) =
+let update (resourceManager : IResourceManager) (dudePos : Vec<m> option) (dt : float<s>) (this : Sentry) : Sentry * (Projectile list) =
     let createProjectile(direction) = {
         Projectile.create resourceManager with
             Allied = false
@@ -93,4 +104,7 @@ let render (this : Sentry) : Renderable list =
         Layer = 0.f
         Texture = Some (this.Texture)
     }) ]
+
+let isAlive (this : Sentry) = 
+    this.Health > 0.<HP>
 
