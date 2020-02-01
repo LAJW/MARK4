@@ -79,7 +79,7 @@ let waitOnce() =
 let waitFor(expected : float<s>) =
     let mutable remaining = expected
     StateMachine.Checked(
-        (fun (dt : float<s>) ->
+        (fun (dt : float<s>, _state) ->
             if remaining <= dt then
                 true
             else
@@ -89,7 +89,7 @@ let waitFor(expected : float<s>) =
 
 let waitUntil(callback) =
     StateMachine.Checked(
-        (fun _ -> callback()),
+        (fun (_dt, state) -> callback state),
         (fun () -> Detail.result ()), [])
 
 let step = Detail.step

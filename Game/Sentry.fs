@@ -3,7 +3,7 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 open StateMachine
 
 let create (resourceManager : IResourceManager) =
-    let ai : StateMachine<unit, float<s>, Command> = sm {
+    let ai : StateMachine<unit, (float<s> * Sentry), Command> = sm {
         while true do
             yield MoveTo(vec(500.<m>, 300.<m>))
             do! waitFor(5.<s>)
@@ -24,7 +24,7 @@ let create (resourceManager : IResourceManager) =
 let speed = 300.<m/s>
 
 let update (dt : float<s>) (this : Sentry) =
-    let ai, commands = this.Ai |> StateMachine.step dt
+    let ai, commands = this.Ai |> StateMachine.step (dt, this)
     let maybeCommand = commands |> List.tryLast |> Option.orElse this.Command
     match maybeCommand with
     | Some command ->
