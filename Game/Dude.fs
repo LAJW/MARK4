@@ -47,3 +47,5 @@ let isAlive (this : Dude) =
     this.Health > 0.<HP>
 
 let pos (this : Dude) = this.Pos
+
+let health (this : Dude) = this.Health

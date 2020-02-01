@@ -29,7 +29,36 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
         }
     |> removeDead
 
+let renderBar (fraction) (offset : VecI) =
+    let barMaxLength = 500
+    let barLength = int (float barMaxLength * (fraction |> confine 0. 1.))
+    let margin = 20
+    let height = 20
+    let foreground = Sprite({
+        Target = SpriteTarget.Screen({
+            Pos = (veci((barLength + margin) / 2, margin) + offset) |> VecI.toPair
+            Size = SpriteScreenSize.Rectangle(barLength - 2, height - 2)
+        })
+        Rotation = 0.<rad>
+        Color = Color.LimeGreen
+        Layer = 1.f
+        Texture = None
+    })
+    let background = Sprite({
+        Target = SpriteTarget.Screen({
+            Pos = (veci((barMaxLength + margin) / 2, margin) + offset) |> VecI.toPair
+            Size = SpriteScreenSize.Rectangle(barMaxLength, height)
+        })
+        Rotation = 0.<rad>
+        Color = Color.Gray
+        Layer = 0.9f
+        Texture = None
+    })
+    [ foreground; background ]
+
+
 let render (this : World) : Renderable list =
+    let healthFraction = (this.Dude |> Option.map Dude.health |> Option.defaultValue 0.<HP>) / 100.<HP>
     Seq.concat([
         this.Dude |> Option.toList |> Seq.map Dude.render
         this.Items |> Seq.map Item.render
@@ -37,5 +66,6 @@ let render (this : World) : Renderable list =
         this.Enemies |> Seq.map Sentry.render
     ])
     |> Seq.collect id
+    |> Seq.append (renderBar healthFraction (veci(0, 0)))
     |> Seq.toList
 
