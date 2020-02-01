@@ -22,7 +22,6 @@ let rec stalkDude() : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command
         yield MoveTo dudePos
         yield Shoot dudePos
         return! stalkDude()
-    return! waitOnce()
 }
 
 let create (resourceManager : IResourceManager) =
