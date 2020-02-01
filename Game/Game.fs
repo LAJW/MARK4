@@ -43,17 +43,23 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
 type Game1 () as this =
     inherit Game()
  
-    let graphics_ =
+    let gdm =
         let gdm = new GraphicsDeviceManager(this)
         do gdm.PreferredBackBufferWidth <- 1500
         do gdm.PreferredBackBufferHeight <- 1000
+        do gdm.ApplyChanges();
         gdm
 
     do this.Content.RootDirectory <- "Content"
     do this.IsMouseVisible <- true
     let mutable game = Unchecked.defaultof<Game2>
 
-    override this.Initialize() = game <- Game2(this.Content, this.GraphicsDevice)
+    override this.Initialize() =
+        game <- Game2(this.Content, this.GraphicsDevice)
+        do gdm.PreferredBackBufferWidth <- 1500
+        do gdm.PreferredBackBufferHeight <- 1000
+        do gdm.ApplyChanges()
+
     override this.LoadContent() = ()
     override this.Update gameTime = game.Update(gameTime)
     override this.Draw _ = game.Draw
