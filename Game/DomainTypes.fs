@@ -100,6 +100,7 @@ type Projectile = {
 
 type Sentry = {
     Pos : Vec<m>
+    Texture : Texture2D
 }
 
 type Chem =
