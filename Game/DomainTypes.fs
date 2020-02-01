@@ -1,6 +1,7 @@
 ﻿[<AutoOpen>]
 module DomainTypes
 open FSharp.Data.UnitSystems.SI.UnitSymbols
+open StateMachine
 
 type Color = Microsoft.Xna.Framework.Color
 type Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D
@@ -98,9 +99,14 @@ type Projectile = {
     Texture : Texture2D
 }
 
+type Command =
+| MoveTo of Vec<m>
+
 type Sentry = {
     Pos : Vec<m>
     Texture : Texture2D
+    Ai : StateMachine<unit, float<s>, Command>
+    Command : Command option
 }
 
 type Chem =

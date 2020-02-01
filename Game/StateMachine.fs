@@ -92,6 +92,8 @@ let waitUntil(callback) =
         (fun _ -> callback()),
         (fun () -> Detail.result ()), [])
 
+let step = Detail.step
+
 type StateMachineManager<'T, 'U, 'V>(machine : StateMachine<'T, 'U, 'V>) =
     let mutable state = machine
     member this.Update (condArg : 'U) : 'V list =
