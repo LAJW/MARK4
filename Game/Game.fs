@@ -16,7 +16,7 @@ let resolution = veci(1500, 1000)
 type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
     let renderer = Renderer(graphicsDevice)
     let resourceManager = ResourceManager(content) :> IResourceManager
-    let camera : Camera = {
+    let mutable camera : Camera = {
         Offset = Vec.Zero
         Scale = 1.
     }
@@ -41,6 +41,13 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
     member this.Update(gameTime : GameTime) : unit = 
         let dt = (float gameTime.ElapsedGameTime.Milliseconds) * (1.<s> / 1000.)
         let controller = Controller.create resolution camera (Mouse.GetState()) (Keyboard.GetState())
+        do camera <-
+            match world.Dude with
+            | Some dude ->
+                let diff = dude.Pos - camera.Offset
+                let cameraPos = camera.Offset + diff * (0.9<1/s> * dt)
+                { camera with Offset = cameraPos }
+            | None -> camera
         do world <- world |> World.update resourceManager controller dt
         ()
 
