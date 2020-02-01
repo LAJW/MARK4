@@ -64,7 +64,7 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
             match world.Dude with
             | Some dude ->
                 let diff = dude.Pos - camera.Offset
-                let cameraPos = camera.Offset + diff * (0.9<1/s> * dt)
+                let cameraPos = camera.Offset + diff * (2.9<1/s> * dt)
                 { camera with Offset = cameraPos }
             | None -> camera
         do world <- world |> World.update resourceManager controller dt
