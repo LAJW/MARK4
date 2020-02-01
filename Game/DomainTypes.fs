@@ -101,6 +101,7 @@ type Projectile = {
 
 type Command =
 | MoveTo of Vec<m>
+| Shoot of Vec<m>
 
 type Sentry = {
     Pos : Vec<m>
@@ -108,6 +109,7 @@ type Sentry = {
     Path : Vec<m> list
     Ai : StateMachine<unit, (float<s> * (Sentry * Vec<m>)), Command>
     Command : Command option
+    Cooldown : Cooldown
 }
 
 type Chem =
