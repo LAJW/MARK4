@@ -2,7 +2,7 @@
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 open StateMachine
 
-let spotDistance = 200.<m>
+let spotDistance = 300.<m>
 
 let waitUntilAndReturn condition : StateMachine<'u, (float<s> * 'u), 'a>  =
     sm {
