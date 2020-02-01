@@ -3,7 +3,9 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 let update (dude : Dude) (this : Item) : (Item option) * (Effect option) =
     if this.Pos |> Vec.inProximity dude.Pos 65.<m> then
-        None, Some Restore
+        match this.Chem with
+        | Stimpack -> None, Some Restore
+        | RadX -> None, Some RadResist
     else Some this, None
 
 let render (this : Item) : Renderable list =
@@ -13,7 +15,10 @@ let render (this : Item) : Renderable list =
             Size = SpriteWorldSize.Square(30.<m>)
         })
         Rotation = 0.<rad>
-        Color = Color.LimeGreen
+        Color = 
+            match this.Chem with
+            | Stimpack -> Color.LimeGreen
+            | RadX -> Color.Orange
         Layer = 0.2f
         Texture = None
     }) ]

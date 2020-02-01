@@ -36,7 +36,7 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
         }
     |> removeDead
 
-let renderBar (fraction) (offset : VecI) =
+let renderBar (fraction) (offset : VecI) (color : Color) =
     let barMaxLength = 500
     let barLength = int (float barMaxLength * (fraction |> confine 0. 1.))
     let margin = 20
@@ -47,7 +47,7 @@ let renderBar (fraction) (offset : VecI) =
             Size = SpriteScreenSize.Rectangle(barLength - 2, height - 2)
         })
         Rotation = 0.<rad>
-        Color = Color.LimeGreen
+        Color = color
         Layer = 1.f
         Texture = None
     })
@@ -66,6 +66,7 @@ let renderBar (fraction) (offset : VecI) =
 
 let render (this : World) : Renderable list =
     let healthFraction = (this.Dude |> Option.map Dude.health |> Option.defaultValue 0.<HP>) / 100.<HP>
+    let radXFraction = (this.Dude |> Option.map (fun dude -> dude.RadResist / 10.<s>) |> Option.defaultValue 0.)
     Seq.concat([
         this.Dude |> Option.toList |> Seq.map Dude.render
         this.Items |> Seq.map Item.render
@@ -73,6 +74,7 @@ let render (this : World) : Renderable list =
         this.Enemies |> Seq.map Sentry.render
     ])
     |> Seq.collect id
-    |> Seq.append (renderBar healthFraction (veci(0, 0)))
+    |> Seq.append (renderBar healthFraction (veci(0, 0)) Color.LimeGreen)
+    |> Seq.append (renderBar radXFraction (veci(0, 40)) Color.MonoGameOrange)
     |> Seq.toList
 

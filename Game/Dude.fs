@@ -10,7 +10,16 @@ let create(resourceManager : IResourceManager) : Dude =
         Texture = resourceManager.Texture("Triangle")
         Direction = Vec.Zero
         WeaponCooldown = Cooldown.create(0.5<s>)
+        RadResist = 0.<s>
     }
+
+let radResistActive (this : Dude) =
+    this.RadResist > 0.<s>
+
+let radDamageSpeed (this : Dude) =
+    if this |> radResistActive then
+        5.<HP/s>
+    else 10.<HP/s>
 
 let update (resourceManager : IResourceManager) (controller : Controller) (dt : float<s>) (this : Dude) : Dude * (Projectile option) =
     let direction = Vec.normalize(controller.PlayerCrosshairPos - this.Pos)
@@ -28,7 +37,8 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
             Pos = this.Pos + controller.PlayerMoveDirection * speed * dt
             Direction = direction
             WeaponCooldown = cooldown
-            Health = this.Health - 10.<HP/s> * dt
+            Health = this.Health - (radDamageSpeed this) * dt
+            RadResist = max 0.<s> (this.RadResist - dt)
     }
     newThis, projectile
 

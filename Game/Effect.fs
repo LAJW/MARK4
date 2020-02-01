@@ -1,4 +1,5 @@
 ﻿module Effect
+open FSharp.Data.UnitSystems.SI.UnitSymbols
 
 let replaceAt index value list =
     let before = list |> List.take index
@@ -21,5 +22,8 @@ let apply (world : World) (effect : Effect) =
     | Restore ->
         world
         { world with Dude = world.Dude |> Option.map (fun dude -> { dude with Health = 100.<HP> }) }
+    | RadResist ->
+        world
+        { world with Dude = world.Dude |> Option.map (fun dude -> { dude with RadResist = 10.<s> })}
 
         
