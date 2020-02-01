@@ -4,15 +4,17 @@ open StateMachine
 
 let create (resourceManager : IResourceManager) =
     let ai : StateMachine<unit, (float<s> * Sentry), Command> = sm {
+        let path = [
+            vec(500.<m>, 300.<m>)
+            vec(200.<m>, 300.<m>)
+            vec(200.<m>, -300.<m>)
+            vec(500.<m>, -300.<m>)
+        ]
         while true do
-            yield MoveTo(vec(500.<m>, 300.<m>))
-            do! waitFor(5.<s>)
-            yield MoveTo(vec(200.<m>, 300.<m>))
-            do! waitFor(3.<s>)
-            yield MoveTo(vec(200.<m>, -300.<m>))
-            do! waitFor(5.<s>)
-            yield MoveTo(vec(500.<m>, -300.<m>))
-            do! waitFor(3.<s>)
+            for dest in path do
+                yield MoveTo(dest)
+                do! waitFor(0.5<s>)
+                do! waitUntil(fun sentry -> sentry.Pos |> Vec.inProximity dest 10.<m>)
     }
     {
         Pos = Vec.Zero
