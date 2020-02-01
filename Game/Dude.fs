@@ -39,7 +39,7 @@ let render (this : Dude) : Renderable list =
         })
         Rotation = this.Direction |> Vec.atan
         Color = Color.White
-        Layer = 0.f
+        Layer = 0.2f
         Texture = Some (this.Texture)
     }) ]
 

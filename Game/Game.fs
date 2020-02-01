@@ -21,6 +21,8 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
         Scale = 1.
     }
 
+    let concrete = resourceManager.Texture "concrete"
+
     let mutable world : World = {
         Dude = Dude.create(resourceManager) |> Some
         Items = []
@@ -64,7 +66,17 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
             Layer = 1.f
             Texture = None
         })
-        do renderer.Draw camera ([ cursor ] @ World.render world)
+        let background = Sprite({
+            Target = SpriteTarget.World({
+                Pos = Vec(0.<m>, 0.<m>)
+                Size = SpriteWorldSize.Rectangle(6560.<m>, 4256.<m>)
+            })
+            Rotation = 0.<rad>
+            Color = Color.Gray
+            Layer = 0.f
+            Texture = Some concrete
+        })
+        do renderer.Draw camera ([ cursor ] @ World.render world @ [ background ])
 
 type Game1 () as this =
     inherit Game()

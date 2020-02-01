@@ -101,7 +101,7 @@ let render (this : Sentry) : Renderable list =
         })
         Rotation = 0.<rad>
         Color = Color.Orange
-        Layer = 0.f
+        Layer = 0.2f
         Texture = Some (this.Texture)
     }) ]
 

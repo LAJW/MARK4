@@ -45,7 +45,7 @@ let render (this : Projectile) : Renderable list =
         })
         Rotation = this.Direction |> Vec.atan
         Color = Color.Red
-        Layer = 0.f
+        Layer = 0.2f
         Texture = Some (this.Texture)
     }) ]
 
