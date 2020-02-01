@@ -14,11 +14,28 @@ let create (resourceManager : IResourceManager) =
         Texture = texture resourceManager
     }
 
-let update (dt : float<s>) (this : Projectile) =
-    { this with
-        Pos = this.Pos + this.Direction * this.Speed * dt
-        Lifespan = this.Lifespan - dt
-    }
+let update (world : World) (dt : float<s>) (this : Projectile) : (Projectile option) * (Effect option) =
+    let targets = 
+        if this.Allied then
+            world.Enemies
+            |> Seq.map (fun enemy -> enemy.Pos)
+            |> Seq.enumerate
+            |> Seq.map(fun (index, pos) -> Id(index), pos)
+        else List.toSeq[ (Id(-1), world.Dude.Pos) ]
+    let collision =
+        targets |> Seq.tryFind(fun (id, targetPos) -> targetPos |> Vec.inProximity this.Pos 55.<m>)
+    match collision with
+    | Some (id, target) -> 
+        None, Some (Damage(id, 10.<HP>))
+    | None ->
+        let projectile = 
+            Some ({
+                this with
+                    Pos = this.Pos + this.Direction * this.Speed * dt
+                    Lifespan = this.Lifespan - dt
+            })
+            |> Option.filter (fun projectile -> projectile.Lifespan > 0.<s>)
+        projectile, None
 
 let render (this : Projectile) : Renderable list =
     [ Sprite({

@@ -7,12 +7,13 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
     let enemies, enemyProjectiles = 
         let results = this.Enemies |> List.map (Sentry.update resourceManager this.Dude.Pos dt)
         (results |> List.map fst, results |> List.collect snd)
+    let projectiles, effects =
+        let results = this.Projectiles |> List.map (Projectile.update this dt)
+        (results |> List.choose fst, results |> List.map snd)
     { this with
         Dude = newDude
         Enemies = enemies
-        Projectiles = 
-            let projectiles = this.Projectiles |> List.map (Projectile.update dt)
-            projectiles @ enemyProjectiles @ ( dudeProjectile |> Option.toList )
+        Projectiles = projectiles @ enemyProjectiles @ ( dudeProjectile |> Option.toList )
     }
 
 let render (this : World) : Renderable list =

@@ -54,7 +54,8 @@ let update (resourceManager : IResourceManager) (dudePos : Vec<m>) (dt : float<s
             Allied = false
             Pos = this.Pos
             Direction = direction
-            Speed = 1000.<m/s> }
+            Speed = 1000.<m/s>
+            Lifespan = 5.<s> }
     let cooldown, _ = this.Cooldown |> Cooldown.update false dt (fun () -> createProjectile Vec.Zero)
     let newAi, commands = this.Ai |> StateMachine.step (dt, (this, dudePos))
     if commands.IsEmpty then

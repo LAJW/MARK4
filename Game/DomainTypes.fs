@@ -90,6 +90,14 @@ type Dude = {
     WeaponCooldown : Cooldown
 }
 
+// Unit ID
+// Positive - enemies
+// -1 - dude
+type Id = Id of int
+
+type Effect =
+| Damage of Id * float<HP>
+
 type Projectile = {
     Allied : bool
     Pos : Vec<m>
