@@ -59,6 +59,13 @@ type Camera = {
     Scale : float
 }
 
+// HID
+
+type Controller = {
+    PlayerMoveDirection : Vec<1>
+    PlayerCrosshairPos : Vec<m>
+}
+
 // Game domain
 
 [<Measure>]
@@ -71,13 +78,15 @@ type Dude = {
     Pos : Vec<m>
     Health : float<HP>
     Rads : float<RAD>
+    Texture : Texture2D
+    Direction : Vec<1>
 }
 
 type Projectile = {
     Allied : bool
     Pos : Vec<m>
     Direction : Vec<1>
-    Speed : float<m>
+    Speed : float<m/s>
     Lifespan : float<s>
 }
 
@@ -100,6 +109,7 @@ type World = {
     Dude : Dude
     Items : Item list
     Enemies : Sentry list
+    Projectiles : Projectile list
 }
 
 
