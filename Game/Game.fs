@@ -26,6 +26,15 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
     let mutable world : World = {
         Dude = Dude.create(resourceManager) |> Some
         Items = [
+            { Pos = vec(-0.<m>, -0.<m>)
+              Chem = Ship }
+            { Pos = vec(-1000.<m>, -1000.<m>)
+              Chem = ShipPart }
+            { Pos = vec(1000.<m>, -1000.<m>)
+              Chem = ShipPart }
+            { Pos = vec(0.<m>, 1200.<m>)
+              Chem = ShipPart }
+
             { Pos = vec(-400.<m>, -400.<m>)
               Chem = Stimpack }
             { Pos = vec(-400.<m>, 400.<m>)
@@ -45,6 +54,7 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
             }
         ]
         Projectiles = []
+        CollectedParts = 0
     }
 
     member this.Update(gameTime : GameTime) : unit = 

@@ -30,5 +30,15 @@ let apply (world : World) (effect : Effect) =
         { world with Dude = world.Dude |> Option.map (fun dude -> { dude with RadResist = 10.<s> })}
     | DamResist ->
         { world with Dude = world.Dude |> Option.map (fun dude -> { dude with DamResist = 10.<s> })}
-
+    | AddShipPart ->
+        { world with CollectedParts = world.CollectedParts + 1 }
+    | EnterShip ->
+        if world.CollectedParts >= 3 then
+            printfn "************************************************************"
+            printfn "\n\nYou win!\n\n"
+            printfn "************************************************************"
+            { world with Dude = None}
+        else
+            printfn "Gather %d more parts to fix the ship" (3 - world.CollectedParts)
+            world
         

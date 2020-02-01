@@ -7,6 +7,8 @@ let update (dude : Dude) (this : Item) : (Item option) * (Effect option) =
         | Stimpack -> None, Some Restore
         | RadX -> None, Some RadResist
         | MedX -> None, Some DamResist
+        | ShipPart -> None, Some AddShipPart
+        | Ship -> Some this, Some EnterShip
     else Some this, None
 
 let render (this : Item) : Renderable list =
@@ -21,6 +23,8 @@ let render (this : Item) : Renderable list =
             | Stimpack -> Color.LimeGreen
             | RadX -> Color.Orange
             | MedX -> Color.DeepSkyBlue
+            | ShipPart -> Color.MediumPurple
+            | Ship -> Color.DeepPink
         Layer = 0.2f
         Texture = None
     }) ]

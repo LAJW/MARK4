@@ -102,6 +102,8 @@ type Effect =
 | Restore
 | RadResist
 | DamResist
+| AddShipPart
+| EnterShip
 
 type Projectile = {
     Allied : bool
@@ -128,9 +130,10 @@ type Sentry = {
 
 type Chem =
 | Stimpack
-| Radaway
 | RadX
 | MedX
+| ShipPart
+| Ship
 
 type Item = { 
     Pos : Vec<m>
@@ -142,6 +145,7 @@ type World = {
     Items : Item list
     Enemies : Sentry list
     Projectiles : Projectile list
+    CollectedParts : int
 }
 
 
