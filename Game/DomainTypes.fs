@@ -5,6 +5,8 @@ open FSharp.Data.UnitSystems.SI.UnitSymbols
 type Color = Microsoft.Xna.Framework.Color
 type Texture2D = Microsoft.Xna.Framework.Graphics.Texture2D
 
+// Engine Domain
+
 type SpriteWorldSize =
 | Square of float<m>
 | Rectangle of float<m> pair
@@ -56,3 +58,48 @@ type Camera = {
     Offset : Vec<m>
     Scale : float
 }
+
+// Game domain
+
+[<Measure>]
+type HP
+
+[<Measure>]
+type RAD
+
+type Dude = {
+    Pos : Vec<m>
+    Health : float<HP>
+    Rads : float<RAD>
+}
+
+type Projectile = {
+    Allied : bool
+    Pos : Vec<m>
+    Direction : Vec<1>
+    Speed : float<m>
+    Lifespan : float<s>
+}
+
+type Sentry = {
+    Pos : Vec<m>
+}
+
+type Chem =
+| Stimpack
+| Radaway
+| RadX
+| MedX
+
+type Item = { 
+    Pos : Vec<m>
+    Chem : Chem
+}
+
+type World = {
+    Dude : Dude
+    Items : Item list
+    Enemies : Sentry list
+}
+
+
