@@ -30,6 +30,8 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
               Chem = Stimpack }
             { Pos = vec(-400.<m>, 400.<m>)
               Chem = RadX }
+            { Pos = vec(0.<m>, 400.<m>)
+              Chem = MedX }
         ]
         Enemies = [
             { Sentry.create (resourceManager) with

@@ -6,6 +6,7 @@ let update (dude : Dude) (this : Item) : (Item option) * (Effect option) =
         match this.Chem with
         | Stimpack -> None, Some Restore
         | RadX -> None, Some RadResist
+        | MedX -> None, Some DamResist
     else Some this, None
 
 let render (this : Item) : Renderable list =
@@ -19,6 +20,7 @@ let render (this : Item) : Renderable list =
             match this.Chem with
             | Stimpack -> Color.LimeGreen
             | RadX -> Color.Orange
+            | MedX -> Color.DeepSkyBlue
         Layer = 0.2f
         Texture = None
     }) ]

@@ -88,6 +88,7 @@ type Dude = {
     Texture : Texture2D
     Direction : Vec<1>
     WeaponCooldown : Cooldown
+    DamResist : float<s>
     RadResist : float<s>
 }
 
@@ -100,6 +101,7 @@ type Effect =
 | Damage of Id * float<HP>
 | Restore
 | RadResist
+| DamResist
 
 type Projectile = {
     Allied : bool

@@ -18,12 +18,17 @@ let apply (world : World) (effect : Effect) =
                 { world with Enemies = world.Enemies |> replaceAt index affected }
             else
                 { world with
-                    Dude = world.Dude |> Option.map(fun dude -> { dude with Health = dude.Health - amount }) }
+                    Dude = world.Dude |> Option.map(fun dude ->
+                        let damageAmount =
+                            if dude.DamResist > 0.<s> then
+                                amount * 0.5
+                            else amount
+                        { dude with Health = dude.Health - amount }) }
     | Restore ->
-        world
         { world with Dude = world.Dude |> Option.map (fun dude -> { dude with Health = 100.<HP> }) }
     | RadResist ->
-        world
         { world with Dude = world.Dude |> Option.map (fun dude -> { dude with RadResist = 10.<s> })}
+    | DamResist ->
+        { world with Dude = world.Dude |> Option.map (fun dude -> { dude with DamResist = 10.<s> })}
 
         

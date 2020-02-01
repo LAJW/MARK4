@@ -10,6 +10,7 @@ let create(resourceManager : IResourceManager) : Dude =
         Texture = resourceManager.Texture("Triangle")
         Direction = Vec.Zero
         WeaponCooldown = Cooldown.create(0.5<s>)
+        DamResist = 0.<s>
         RadResist = 0.<s>
     }
 
@@ -38,6 +39,7 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
             Direction = direction
             WeaponCooldown = cooldown
             Health = this.Health - (radDamageSpeed this) * dt
+            DamResist = max 0.<s> (this.DamResist - dt)
             RadResist = max 0.<s> (this.RadResist - dt)
     }
     newThis, projectile

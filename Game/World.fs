@@ -67,6 +67,7 @@ let renderBar (fraction) (offset : VecI) (color : Color) =
 let render (this : World) : Renderable list =
     let healthFraction = (this.Dude |> Option.map Dude.health |> Option.defaultValue 0.<HP>) / 100.<HP>
     let radXFraction = (this.Dude |> Option.map (fun dude -> dude.RadResist / 10.<s>) |> Option.defaultValue 0.)
+    let medXFraction = (this.Dude |> Option.map (fun dude -> dude.DamResist / 10.<s>) |> Option.defaultValue 0.)
     Seq.concat([
         this.Dude |> Option.toList |> Seq.map Dude.render
         this.Items |> Seq.map Item.render
@@ -76,5 +77,6 @@ let render (this : World) : Renderable list =
     |> Seq.collect id
     |> Seq.append (renderBar healthFraction (veci(0, 0)) Color.LimeGreen)
     |> Seq.append (renderBar radXFraction (veci(0, 40)) Color.MonoGameOrange)
+    |> Seq.append (renderBar medXFraction (veci(0, 80)) Color.DeepSkyBlue)
     |> Seq.toList
 
