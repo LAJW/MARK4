@@ -9,13 +9,26 @@ let create(resourceManager : IResourceManager) : Dude =
         Rads = 0.<RAD>
         Texture = resourceManager.Texture("Triangle")
         Direction = Vec.Zero
+        WeaponCooldown = Cooldown.create(0.5<s>)
     }
 
-let update (controller : Controller) (dt : float<s>) (this : Dude) =
-    { this with
-        Pos = this.Pos + controller.PlayerMoveDirection * speed * dt
-        Direction = Vec.normalize(controller.PlayerCrosshairPos - this.Pos)
+let update (resourceManager : IResourceManager) (controller : Controller) (dt : float<s>) (this : Dude) : Dude * (Projectile option) =
+    let direction = Vec.normalize(controller.PlayerCrosshairPos - this.Pos)
+    let cooldown, projectile =
+        this.WeaponCooldown |> Cooldown.update controller.Shooting dt (fun () -> {
+            Projectile.create resourceManager with
+                Allied = true
+                Pos = this.Pos
+                Direction = direction
+                Speed = 1000.<m/s>
+        })
+    let newThis = {
+        this with
+            Pos = this.Pos + controller.PlayerMoveDirection * speed * dt
+            Direction = direction
+            WeaponCooldown = cooldown
     }
+    newThis, projectile
 
 let render (this : Dude) : Renderable list =
     [ Sprite({

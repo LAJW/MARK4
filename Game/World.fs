@@ -2,11 +2,14 @@
 
 open FSharp.Data.UnitSystems.SI.UnitSymbols
 
-let update (controller : Controller) (dt : float<s>) (this : World) =
+let update (resourceManager : IResourceManager) (controller : Controller) (dt : float<s>) (this : World) =
+    let newDude, dudeProjectile = this.Dude |> Dude.update resourceManager controller dt
     { this with
-        Dude = this.Dude |> Dude.update controller dt
+        Dude = newDude
         Enemies = this.Enemies |> List.map (Sentry.update dt)
-        Projectiles = this.Projectiles |> List.map (Projectile.update dt)
+        Projectiles = 
+            let projectiles = this.Projectiles |> List.map (Projectile.update dt)
+            projectiles @ ( dudeProjectile |> Option.toList )
     }
 
 let render (this : World) : Renderable list =

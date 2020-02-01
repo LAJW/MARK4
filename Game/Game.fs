@@ -31,7 +31,7 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
     member this.Update(gameTime : GameTime) : unit = 
         let dt = (float gameTime.ElapsedGameTime.Milliseconds) * (1.<s> / 1000.)
         let controller = Controller.create resolution camera (Mouse.GetState()) (Keyboard.GetState())
-        do world <- world |> World.update controller dt
+        do world <- world |> World.update resourceManager controller dt
         ()
 
     member this.Draw =

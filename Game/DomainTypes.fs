@@ -64,6 +64,7 @@ type Camera = {
 type Controller = {
     PlayerMoveDirection : Vec<1>
     PlayerCrosshairPos : Vec<m>
+    Shooting : bool
 }
 
 // Game domain
@@ -74,12 +75,18 @@ type HP
 [<Measure>]
 type RAD
 
+type Cooldown = {
+    Total : float<s>
+    Current : float<s>
+}
+
 type Dude = {
     Pos : Vec<m>
     Health : float<HP>
     Rads : float<RAD>
     Texture : Texture2D
     Direction : Vec<1>
+    WeaponCooldown : Cooldown
 }
 
 type Projectile = {
@@ -88,6 +95,7 @@ type Projectile = {
     Direction : Vec<1>
     Speed : float<m/s>
     Lifespan : float<s>
+    Texture : Texture2D
 }
 
 type Sentry = {

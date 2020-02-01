@@ -59,8 +59,9 @@
     <Compile Include="DomainTypes.fs" />
     <Compile Include="Camera.fs" />
     <Compile Include="Controller.fs" />
-    <Compile Include="Dude.fs" />
+    <Compile Include="Cooldown.fs" />
     <Compile Include="Projectile.fs" />
+    <Compile Include="Dude.fs" />
     <Compile Include="Item.fs" />
     <Compile Include="Sentry.fs" />
     <Compile Include="World.fs" />
