@@ -55,6 +55,7 @@ let create (resourceManager : IResourceManager) =
         Path = []
         Health = 20.<HP>
         Cooldown = Cooldown.create(1.<s>)
+        Direction = Vec.Zero
     }
 
 let speed = 300.<m/s>
@@ -85,6 +86,7 @@ let update (resourceManager : IResourceManager) (dudePos : Vec<m> option) (dt : 
                             dest
                         else newPos
                     Command = Some command
+                    Direction = direction
                 }, projectiles
             | Shoot dest ->
                 let direction = Vec.normalize(dest - this.Pos)
@@ -99,7 +101,7 @@ let render (this : Sentry) : Renderable list =
             Pos = this.Pos
             Size = SpriteWorldSize.Square(100.<m>)
         })
-        Rotation = 0.<rad>
+        Rotation = this.Direction |> Vec.atan
         Color = Color.Orange
         Layer = 0.2f
         Texture = Some (this.Texture)

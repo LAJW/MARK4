@@ -127,6 +127,7 @@ type Sentry = {
     Command : Command option
     Cooldown : Cooldown
     Health : float<HP>
+    Direction : Vec<1>
 }
 
 type Chem =
