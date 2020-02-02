@@ -31,7 +31,7 @@ let update (resourceManager : IResourceManager) (controller : Controller) (dt : 
                 Pos = this.Pos
                 Direction = direction
                 Speed = 1000.<m/s>
-                Lifespan = 5.<s>
+                Lifespan = 1.<s>
         })
     let newThis = {
         this with
