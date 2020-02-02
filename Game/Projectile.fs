@@ -44,7 +44,7 @@ let render (this : Projectile) : Renderable list =
             Size = SpriteWorldSize.Square(30.<m>)
         })
         Rotation = this.Direction |> Vec.atan
-        Color = Color.Red
+        Color = if this.Allied then Color.LimeGreen else Color.Red
         Layer = 0.2f
         Texture = Some (this.Texture)
     }) ]
