@@ -11,21 +11,43 @@ open Geometry
 
 let resolution = veci(1500, 1000)
 
+let rotate = function
+    | head :: tail -> tail @ [ head ]
+    | [] -> []
+
 // Wrapper over Game1 to reduce mutability (XNA defers initialization to the
 // Initialize() method which doesn't allow immutability). Initializing objects
 // in the constructor throws strange exceptions
 type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
     let renderer = Renderer(graphicsDevice)
+
     let resourceManager = ResourceManager(content) :> IResourceManager
-    let mutable camera : Camera = {
+
+    let createCamera() : Camera = {
         Offset = Vec.Zero
         Scale = 1.
     }
 
+    let mutable camera = createCamera()
+
     let concrete = resourceManager.Texture "concrete"
 
-    let mutable world : World = {
-        Dude = Dude.create(resourceManager) |> Some
+    let guard path =
+        { Sentry.create resourceManager with
+            Pos = path |> List.head
+            Path = path }
+
+    let guardWithSquarePath pos variant =
+        let path = [ pos + vec(-150.<m>, -150.<m>)
+                     pos + vec(150.<m>, -150.<m>)
+                     pos + vec(150.<m>, 150.<m>)
+                     pos + vec(-150.<m>, 150.<m>) ]
+        Seq.init variant id
+        |> Seq.fold (fun path _ -> rotate path) path
+        |> guard
+
+    let createWorld() : World = {
+        Dude = Dude.create resourceManager |> Some
         Items = [
             { Pos = vec(-0.<m>, -0.<m>)
               Chem = Ship }
@@ -44,19 +66,29 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
               Chem = MedX }
         ]
         Enemies = [
-            { Sentry.create (resourceManager) with
+            { Sentry.create resourceManager with
                 Pos = vec(500.<m>, -300.<m>)
                 Path = [
                     vec(500.<m>, 300.<m>)
                     vec(200.<m>, 300.<m>)
                     vec(200.<m>, -300.<m>)
                     vec(500.<m>, -300.<m>)
-                ]
-            }
+                ] }
+
+            guardWithSquarePath (vec(-1000.<m>, -1000.<m>)) 0
+            guardWithSquarePath (vec(-1000.<m>, -1000.<m>)) 2
+
+            guardWithSquarePath (vec(1000.<m>, -1000.<m>)) 0
+            guardWithSquarePath (vec(1000.<m>, -1000.<m>)) 2
+
+            guardWithSquarePath (vec(0.<m>, 1200.<m>)) 3
+            guardWithSquarePath (vec(0.<m>, 1200.<m>)) 1
         ]
         Projectiles = []
         CollectedParts = 0
     }
+
+    let mutable world = createWorld()
 
     member this.Update(gameTime : GameTime) : unit = 
         let dt = (float gameTime.ElapsedGameTime.Milliseconds) * (1.<s> / 1000.)
@@ -69,6 +101,9 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
                 { camera with Offset = cameraPos }
             | None -> camera
         do world <- world |> World.update resourceManager controller dt
+        if controller.Reset then
+            world <- createWorld()
+            camera <- createCamera()
         ()
 
     member this.Draw =

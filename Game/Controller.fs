@@ -28,6 +28,7 @@ let create (resolution : VecI) (camera : Camera) (mouseState : MouseState) (keyb
         PlayerCrosshairPos = Camera.screenToWorld(mouseScreenPos, resolution, camera)
         PlayerMoveDirection = keyboardState |> Detail.keyboardStateToDirection
         Shooting = mouseState.LeftButton = ButtonState.Pressed
+        Reset = keyboardState.IsKeyDown(Keys.R)
     }
 
 

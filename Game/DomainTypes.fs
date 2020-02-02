@@ -66,6 +66,7 @@ type Controller = {
     PlayerMoveDirection : Vec<1>
     PlayerCrosshairPos : Vec<m>
     Shooting : bool
+    Reset : bool
 }
 
 // Game domain
