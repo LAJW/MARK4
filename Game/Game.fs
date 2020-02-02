@@ -64,6 +64,13 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
               Chem = RadX }
             { Pos = vec(0.<m>, 400.<m>)
               Chem = MedX }
+
+            { Pos = vec(800.<m>, 800.<m>)
+              Chem = RadX }
+            { Pos = vec(-800.<m>, 800.<m>)
+              Chem = Stimpack }
+            { Pos = vec(0.<m>, -1000.<m>)
+              Chem = RadX }
         ]
         Enemies = [
             { Sentry.create resourceManager with
@@ -83,6 +90,9 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
 
             guardWithSquarePath (vec(0.<m>, 1200.<m>)) 3
             guardWithSquarePath (vec(0.<m>, 1200.<m>)) 1
+
+            guard [vec(-600.<m>, -400.<m>); vec(-600.<m>, 400.<m>)]
+            guard [vec(-400.<m>, 600.<m>); vec(400.<m>, 600.<m>)]
         ]
         Projectiles = []
         CollectedParts = 0
