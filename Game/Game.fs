@@ -96,10 +96,10 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
         })
         let indicator target (color : Color) = 
             let ray = camera.Offset, target
-            let top = Camera.screenToWorld2 ((veci(1, 11), veci(1500, 10)), resolution, camera) 
-            let bottom = Camera.screenToWorld2 ((veci(1, 991), veci(1500, 990)), resolution, camera) 
-            let left = Camera.screenToWorld2 ((veci(11, 1), veci(10, 1000)), resolution, camera) 
-            let right = Camera.screenToWorld2 ((veci(1491, 1), veci(1490, 1000)), resolution, camera) 
+            let top = Camera.screenToWorld2 ((veci(0, 10), veci(1500, 10)), resolution, camera) 
+            let bottom = Camera.screenToWorld2 ((veci(0, 990), veci(1500, 990)), resolution, camera) 
+            let left = Camera.screenToWorld2 ((veci(10, 1), veci(10, 1000)), resolution, camera) 
+            let right = Camera.screenToWorld2 ((veci(1490, 1), veci(1490, 1000)), resolution, camera) 
             [
                 Segment.intersect ray top
                 Segment.intersect ray bottom

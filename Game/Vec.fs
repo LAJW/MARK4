@@ -62,7 +62,7 @@ type Vec<'u> with
         let xl, yl = (min a.x b.x), (min a.y b.y)
         let xu, yu = (max a.x b.x), (max a.y b.y)
         let x, y = pos.x, pos.y
-        xl <= x && yl <= y && xu >= x && yu >= y
+        xl <=~ x && yl <=~ y && xu >=~ x && yu >=~ y
 
     static member inProximity (origin : Vec<'u>) (distance : float<'u>) (point : Vec<'u>) =
         Vec.length(point - origin) <= distance
