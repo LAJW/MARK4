@@ -86,7 +86,7 @@ let update (resourceManager : IResourceManager) (dudePos : Vec<m> option) (dt : 
                             dest
                         else newPos
                     Command = Some command
-                    Direction = direction
+                    Direction = if direction = Vec.Zero then this.Direction else direction
                 }, projectiles
             | Shoot dest ->
                 let direction = Vec.normalize(dest - this.Pos)
