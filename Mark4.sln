@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mark4", "Mark3\Mark4.fsproj", "{537568BA-8AF5-4C0C-A934-C35A0F82B651}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Mark4", "Mark4\Mark4.fsproj", "{537568BA-8AF5-4C0C-A934-C35A0F82B651}"
 	ProjectSection(ProjectDependencies) = postProject
 		{137B57F8-175F-4899-AF88-8899FF6CB168} = {137B57F8-175F-4899-AF88-8899FF6CB168}
 	EndProjectSection
