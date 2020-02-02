@@ -11,6 +11,14 @@ let update (dude : Dude) (this : Item) : (Item option) * (Effect option) =
         | Ship -> Some this, Some EnterShip
     else Some this, None
 
+let color (chem : Chem) = 
+    match chem with
+    | Stimpack -> Color.LimeGreen
+    | RadX -> Color.MonoGameOrange
+    | MedX -> Color.DeepSkyBlue
+    | ShipPart -> Color.MediumPurple
+    | Ship -> Color.DeepPink
+
 let render (this : Item) : Renderable list =
     [ Sprite({
         Target = SpriteTarget.World({
@@ -18,13 +26,7 @@ let render (this : Item) : Renderable list =
             Size = SpriteWorldSize.Square(30.<m>)
         })
         Rotation = 0.<rad>
-        Color = 
-            match this.Chem with
-            | Stimpack -> Color.LimeGreen
-            | RadX -> Color.Orange
-            | MedX -> Color.DeepSkyBlue
-            | ShipPart -> Color.MediumPurple
-            | Ship -> Color.DeepPink
+        Color = color this.Chem
         Layer = 0.2f
         Texture = None
     }) ]

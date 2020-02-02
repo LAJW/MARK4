@@ -7,6 +7,7 @@ open Microsoft.Xna.Framework.Graphics
 open Microsoft.Xna.Framework.Content
 open Renderer
 open ResourceManager
+open Geometry
 
 let resolution = veci(1500, 1000)
 
@@ -93,7 +94,39 @@ type Game2(content : ContentManager, graphicsDevice : GraphicsDevice) =
             Layer = 0.f
             Texture = Some concrete
         })
-        do renderer.Draw camera ([ cursor ] @ World.render world @ [ background ])
+        let indicator target (color : Color) = 
+            let ray = camera.Offset, target
+            let top = Camera.screenToWorld2 ((veci(0, 10), veci(1500, 10)), resolution, camera) 
+            let bottom = Camera.screenToWorld2 ((veci(0, 990), veci(1500, 990)), resolution, camera) 
+            let left = Camera.screenToWorld2 ((veci(10, 0), veci(10, 1000)), resolution, camera) 
+            let right = Camera.screenToWorld2 ((veci(1490, 0), veci(1490, 1000)), resolution, camera) 
+            [
+                Segment.intersect ray top
+                Segment.intersect ray bottom
+                Segment.intersect ray left
+                Segment.intersect ray right
+            ]
+            |> Seq.collect Option.toList
+            |> Seq.tryMinBy Vec.length
+            |> Option.map (fun pos -> 
+                Sprite({
+                    Target = SpriteTarget.World({
+                        Pos = pos
+                        Size = SpriteWorldSize.Square(15.<m>)
+                    })
+                    Rotation = 0.<rad>
+                    Color = color
+                    Layer = 0.8f
+                    Texture = None
+                })
+            )
+            |> Option.toList
+        let indicators = world.Items |> List.collect(fun item ->
+            let pos = item.Pos 
+            let color = Item.color item.Chem
+            indicator pos color)
+
+        do renderer.Draw camera ([ cursor ] @ World.render world @ [ background ] @ indicators)
 
 type Game1 () as this =
     inherit Game()
